@@ -1,0 +1,142 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ingestion-data
+data:
+  halloween-superhero-costume.txt: |
+    Rules for Creating a Halloween SuperHero Costume
+
+    This document outlines the guidelines for creating a Halloween costume inspired by a superhero, for individuals aged 12 to 20. Whether you're aiming for authenticity or a creative twist, these rules will help you craft the perfect look.
+    Costume Guidelines
+
+    1. Character Authenticity:
+    Your costume should reflect the traditional appearance of the superhero as depicted in comic books and movies. This includes elements such as their armor, cape, color and props.
+
+    2. Age-Appropriate Design:
+    Ensure that your costume is suitable for your age group. It should be fun and creative without being overly revealing or inappropriate.
+
+    3. Safety Considerations:
+    When creating your costume, prioritize safety. Avoid materials that could cause injury, such as sharp edges or heavy items. If using props like Mjolnir, ensure they are lightweight and won’t pose a danger to yourself or others.
+
+    4. DIY vs. Store-Bought:
+    You can either create your costume from scratch (DIY) or purchase pieces from stores. If purchasing, choose high-quality items that represent the character well.
+
+    5. Costume Accessories:
+    Incorporate accessories like Thor's helmet, a cape, and boots. Use colors typically associated with the superhero.  In example, the superhero Thor is associated with: red, silver, blue, and black.
+
+    6. Personal Touch:
+    Feel free to add your own flair to the costume. This could include custom designs, unique materials, or additional superhero elements.
+
+    7. Group Costumes:
+    If you're dressing up with friends, consider coordinating your costumes to represent a group of superheroes from the Marvel or DC universe.
+
+    8. Respectful Representation:
+    Be mindful of cultural and personal sensitivities when representing the superhero, especially considering the characters background, setting and the character's origins.
+
+    9. Comfort and Mobility:
+    Ensure that your costume allows for easy movement and is comfortable to wear for extended periods, especially if you'll be participating in activities or events.
+
+    10. Enjoyment:
+    Above all, have fun with your costume! Embrace the spirit of Halloween and enjoy the creative process.
+
+    11. Costume Ownership Policy
+    Each costume may be owned and added to a costume owner.  The costume will become unique if it has a unique id, ownerfirstname and ownerlastname.
+
+    12. Costume Removal Policy
+    A costume can only be removed from the list if the costume id, ownerfirstname and ownerlastname are provided.
+
+    13. Costume Details Policy
+    A costume details may be returned if the costume id, ownerfirstname and ownerlastname are provided.
+
+    Conclusion
+    Following these guidelines will help you create an exciting and appropriate superhero costume for Halloween. Remember to showcase your creativity and enjoy the festivities!
+#---
+#kind: Deployment
+#apiVersion: apps/v1
+#metadata:
+#  name: vector-db
+#spec:
+#  replicas: 1
+#  selector:
+#    matchLabels:
+#      name: vector-db
+#  template:
+#    metadata:
+#      labels:
+#        name: vector-db
+#    spec:
+#      volumes:
+#        - name: redis-data
+#          emptyDir: {}
+#      containers:
+#        - resources:
+#            limits:
+#              memory: 512Mi
+#          name: vector-db
+#          env:
+#            - name: REDIS_ARGS
+#              value: "--requirepass quarkus"
+#          ports:
+#            - containerPort: 6379
+#              protocol: TCP
+#          volumeMounts:
+#            - name: redis-data
+#              mountPath: /var/lib/redis/data
+#          image: redis/redis-stack:latest
+#apiVersion: apps/v1
+#kind: Deployment
+#metadata:
+#  labels:
+#    app.openshift.io/runtime: postgresql
+#  name: vector-db
+#spec:
+#  replicas: 1
+#  selector:
+#    matchLabels:
+#      name: vector-db
+#  template:
+#    metadata:
+#      labels:
+#        name: vector-db
+#    spec:
+#      containers:
+#        - image: pgvector/pgvector:pg17
+#          name: vector-db
+#          ports:
+#            - containerPort: 5432
+#          env:
+#            - name: POSTGRES_USER
+#              value: quarkus
+#            - name: POSTGRES_PASSWORD
+#              value: quarkus
+#            - name: POSTGRES_DB
+#              value: quarkus
+#          resources:
+#            limits:
+#              memory: 128Mi
+#            requests:
+#              memory: 32Mi
+#          volumeMounts:
+#            - mountPath: /var/lib/postgresql/data
+#              name: vectors-db-data
+#            - mountPath: /var/run/postgresql
+#              name: vectors-db-init
+#      volumes:
+#        - emptyDir: { }
+#          name: vectors-db-data
+#        - emptyDir: { }
+#          name: vectors-db-init
+#---
+#apiVersion: v1
+#kind: Service
+#metadata:
+#  name: vector-db
+#spec:
+#  ports:
+#    - port: 6379
+#      protocol: TCP
+#      targetPort: 6379
+#  selector:
+#    name: vector-db
+#  type: ClusterIP
